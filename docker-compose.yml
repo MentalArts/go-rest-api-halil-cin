@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    env_data: .env
+    ports:
+      -"5432:5432"
+    environment:
+      POSTGRES_PASSWORD: $(PG_PASSWORD)
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+    networks:
+      - db_network
+ 
+
+  go:
+    
+
+ 
+volumes:
+  pgdata:
+networks:
+  db_network:

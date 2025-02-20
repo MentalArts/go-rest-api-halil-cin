@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+
+	"fmt"
 )
 
 type Response struct {
@@ -13,12 +15,21 @@ type Response struct {
 func main() {
 	router := gin.Default()
 	router.GET("/ping", handlePing)
+	router.GET("/hello/:name", handleHello)
 	router.Run(":8000")
 }
 
 func handlePing(c *gin.Context) {
 	res := Response{Msg: "pong"}
 	c.JSON(http.StatusOK, res)
+}
+
+func handleHello(c *gin.Context) {
+	name := c.Param("name")
+
+	msg := fmt.Sprintf("Welcome, %s", name)
+
+	c.String(http.StatusOK, msg)
 }
 
 // Vanilla implementation
