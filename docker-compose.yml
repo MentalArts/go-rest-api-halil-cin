@@ -13,6 +13,11 @@ services:
       - pgdata:/var/lib/postgresql/data 
     networks:
       - db_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
  
   datainserter:
     build:
@@ -23,7 +28,8 @@ services:
     ports:
       - "8080:8080"  
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - db_network
     
