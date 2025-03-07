@@ -1,6 +1,7 @@
 package main
 
 import (
+	"go-rest-api-halil-cin/internal/cache"
 	"go-rest-api-halil-cin/internal/config"
 	"go-rest-api-halil-cin/internal/db"
 	"go-rest-api-halil-cin/internal/handlers"
@@ -12,6 +13,8 @@ import (
 
 func main() {
 	cfg := config.LoadConfig()
+
+	cache.InitializeRedis("redis:6379", "", 0)
 
 	db, err := db.InitDB(cfg)
 	if err != nil {

@@ -27,7 +27,12 @@ services:
     volumes:
       - redisdata:/data
     networks:
-      - app_network
+      - db_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   datainserter:
     build:

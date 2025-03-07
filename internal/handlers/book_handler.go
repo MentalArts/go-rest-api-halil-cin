@@ -1,9 +1,12 @@
 package handlers
 
 import (
+	"encoding/json"
+	"go-rest-api-halil-cin/internal/cache"
 	"go-rest-api-halil-cin/internal/dto"
 	"go-rest-api-halil-cin/internal/models"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -65,22 +68,40 @@ func GetBooks(c *gin.Context) {
 func GetBook(c *gin.Context) {
 	id := c.Param("id")
 
+	// Check if the book is cached
+	cachedBook, err := cache.Get("book:" + id)
+	if err == nil {
+		var book dto.BookResponse
+		if err := json.Unmarshal([]byte(cachedBook), &book); err == nil {
+			c.JSON(http.StatusOK, book)
+			return
+		}
+	}
+
+	// Fetch the book from the database
 	var book models.Book
 	if err := db.Preload("Author").Preload("Reviews").First(&book, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "book not found"})
 		return
 	}
 
-	c.JSON(http.StatusOK, dto.BookResponse{
+	// Prepare the response
+	response := dto.BookResponse{
 		ID:              book.ID,
 		Title:           book.Title,
 		AuthorID:        book.AuthorID,
 		ISBN:            book.ISBN,
 		PublicationYear: book.PublicationYear,
 		Description:     book.Description,
-	})
-}
+	}
 
+	// Cache the book for 5 minutes
+	if jsonData, err := json.Marshal(response); err == nil {
+		cache.Set("book:"+id, jsonData, 5*time.Minute)
+	}
+
+	c.JSON(http.StatusOK, response)
+}
 func UpdateBook(c *gin.Context) {
 	id := c.Param("id")
 
