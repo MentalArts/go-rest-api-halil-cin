@@ -8,6 +8,8 @@ import (
 )
 
 func SetupRoutes(router *gin.Engine) {
+	//Rate limiter
+	router.Use(middleware.RateLimiter())
 	// Public routes
 	auth := router.Group("/api/v1/auth")
 	{
