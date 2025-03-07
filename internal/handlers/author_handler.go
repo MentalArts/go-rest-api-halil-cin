@@ -5,8 +5,6 @@ import (
 	"go-rest-api-halil-cin/internal/models"
 	"net/http"
 
-	_ "go-rest-api-halil-cin/docs" // Import the generated docs
-
 	"github.com/gin-gonic/gin"
 )
 

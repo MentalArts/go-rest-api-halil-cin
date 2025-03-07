@@ -20,20 +20,19 @@ func SetupRoutes(router *gin.Engine) {
 	api := router.Group("/api/v1")
 	api.Use(middleware.AuthRequired())
 	{
-		// Books
+		// Book endpoints
 		api.GET("/books", handlers.GetBooks)
 		api.GET("/books/:id", handlers.GetBook)
 		api.POST("/books", middleware.AdminOnly(), handlers.CreateBook)
 		api.PUT("/books/:id", middleware.AdminOnly(), handlers.UpdateBook)
 		api.DELETE("/books/:id", middleware.AdminOnly(), handlers.DeleteBook)
 
-		// Authors
+		// Author endpoints
 		api.GET("/authors", handlers.GetAuthors)
 		api.GET("/authors/:id", handlers.GetAuthor)
 		api.POST("/authors", middleware.AdminOnly(), handlers.CreateAuthor)
 		api.PUT("/authors/:id", middleware.AdminOnly(), handlers.UpdateAuthor)
 		api.DELETE("/authors/:id", middleware.AdminOnly(), handlers.DeleteAuthor)
-
 		// Reviews
 		api.GET("/books/:id/reviews", handlers.GetReviewsForBook)
 		api.POST("/books/:id/reviews", handlers.CreateReview)
