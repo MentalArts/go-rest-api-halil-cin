@@ -3,7 +3,7 @@ package main
 import (
 	"go-rest-api-halil-cin/internal/config"
 	"go-rest-api-halil-cin/internal/db"
-	"go-rest-api-halil-cin/internal/models"
+	"go-rest-api-halil-cin/internal/handlers"
 	"go-rest-api-halil-cin/internal/routes"
 
 	"github.com/gin-gonic/gin"
@@ -15,10 +15,10 @@ func main() {
 
 	db, err := db.InitDB(cfg)
 	if err != nil {
-		panic("F.. Couldn't connect to Database")
+		panic("Failed to connect to database")
 	}
 
-	db.AutoMigrate(&models.Book{}, &models.Author{}, &models.Review{})
+	handlers.InitDB(db)
 
 	router := gin.Default()
 	routes.SetupRoutes(router)

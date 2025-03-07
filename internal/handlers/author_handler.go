@@ -6,14 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
-
-var db *gorm.DB
-
-func InitDB(database *gorm.DB) {
-	db = database
-}
 
 func CreateAuthor(c *gin.Context) {
 	var req dto.CreateAuthorRequest
