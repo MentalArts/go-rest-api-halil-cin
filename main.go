@@ -1,47 +1,27 @@
 package main
 
 import (
-	"net/http"
+	"go-rest-api-halil-cin/internal/config"
+	"go-rest-api-halil-cin/internal/db"
+	"go-rest-api-halil-cin/internal/models"
+	"go-rest-api-halil-cin/internal/routes"
 
 	"github.com/gin-gonic/gin"
-
-	"fmt"
 )
 
-type Response struct {
-	Msg string `json:"message"`
-}
-
 func main() {
+
+	cfg := config.LoadConfig()
+
+	db, err := db.InitDB(cfg)
+	if err != nil {
+		panic("F.. Couldn't connect to Database")
+	}
+
+	db.AutoMigrate(&models.Book{}, &models.Author{}, &models.Review{})
+
 	router := gin.Default()
-	router.GET("/ping", handlePing)
-	router.GET("/hello/:name", handleHello)
-	router.Run(":8000")
+	routes.SetupRoutes(router)
+
+	router.Run(":8080")
 }
-
-func handlePing(c *gin.Context) {
-	res := Response{Msg: "pong"}
-	c.JSON(http.StatusOK, res)
-}
-
-func handleHello(c *gin.Context) {
-	name := c.Param("name")
-
-	msg := fmt.Sprintf("Welcome, %s", name)
-
-	c.String(http.StatusOK, msg)
-}
-
-// Vanilla implementation
-// func main() {
-// 	http.HandleFunc("GET /ping", handlePing)
-// 	log.Println("Server listening...")
-// 	log.Fatal(http.ListenAndServe(":8000", nil))
-// }
-
-// func handlePing(w http.ResponseWriter, r *http.Request) {
-// 	res := Response{Msg: "pong"}
-// 	json.NewEncoder(w).Encode(res)
-// 	w.WriteHeader(http.StatusOK)
-// 	log.Println("Request recieved")
-// }
