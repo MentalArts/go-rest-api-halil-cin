@@ -5,9 +5,22 @@ import (
 	"go-rest-api-halil-cin/internal/models"
 	"net/http"
 
+	_ "go-rest-api-halil-cin/docs" // Import the generated docs
+
 	"github.com/gin-gonic/gin"
 )
 
+// CreateAuthor godoc
+// @Summary Create a new author
+// @Description Create a new author with the input payload
+// @Tags authors
+// @Accept json
+// @Produce json
+// @Param author body dto.CreateAuthorRequest true "Create author"
+// @Success 201 {object} dto.AuthorResponse
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/authors [post]
 func CreateAuthor(c *gin.Context) {
 	var req dto.CreateAuthorRequest
 
@@ -35,6 +48,15 @@ func CreateAuthor(c *gin.Context) {
 	})
 }
 
+// GetAuthors godoc
+// @Summary Get all authors
+// @Description Get a list of all authors
+// @Tags authors
+// @Accept json
+// @Produce json
+// @Success 200 {array} dto.AuthorResponse
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/authors [get]
 func GetAuthors(c *gin.Context) {
 	var authors []models.Author
 
@@ -56,6 +78,15 @@ func GetAuthors(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// GetAuthor godoc
+// @Summary Get specific author info
+// @Description Get an author by given id
+// @Tags author
+// @Accept json
+// @Produce json
+// @Success 200 {array} dto.AuthorResponse
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/author/:id [get]
 func GetAuthor(c *gin.Context) {
 	id := c.Param("id")
 
