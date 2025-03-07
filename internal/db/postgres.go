@@ -8,7 +8,7 @@ import (
 )
 
 func InitDB(cfg *config.Config) (*gorm.DB, error) {
-	dsn := "host=" + cfg.PGHost +
+	dsn := "host=db" +
 		" user=" + cfg.PGUser +
 		" password=" + cfg.PGPassword +
 		" dbname=" + cfg.PGName +
