@@ -33,8 +33,6 @@ func GetReviewsForBook(c *gin.Context) {
 }
 
 func CreateReview(c *gin.Context) {
-	bookID := c.Param("id")
-
 	var req dto.CreateReviewRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -44,7 +42,7 @@ func CreateReview(c *gin.Context) {
 	review := models.Review{
 		Rating:     req.Rating,
 		Comment:    req.Comment,
-		BookID:     req.BookID,
+		BookID:     req.BookID, // Use req.BookID directly
 		DatePosted: time.Now().Format("2006-01-02 15:04:05"),
 	}
 
