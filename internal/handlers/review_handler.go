@@ -9,6 +9,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GetReviewsForBook godoc
+// @Summary Get reviews for a specific book
+// @Description Get a list of reviews for a book by its ID
+// @Tags reviews
+// @Accept json
+// @Produce json
+// @Param id path string true "Book ID"
+// @Success 200 {array} dto.ReviewResponse
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/books/{id}/reviews [get]
 func GetReviewsForBook(c *gin.Context) {
 	bookID := c.Param("id")
 
@@ -32,6 +42,17 @@ func GetReviewsForBook(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// CreateReview godoc
+// @Summary Create a new review
+// @Description Create a new review for a book
+// @Tags reviews
+// @Accept json
+// @Produce json
+// @Param review body dto.CreateReviewRequest true "Create review"
+// @Success 201 {object} dto.ReviewResponse
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/books/{id}/reviews [post]
 func CreateReview(c *gin.Context) {
 	var req dto.CreateReviewRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -60,6 +81,19 @@ func CreateReview(c *gin.Context) {
 	})
 }
 
+// UpdateReview godoc
+// @Summary Update a review
+// @Description Update a review by its ID
+// @Tags reviews
+// @Accept json
+// @Produce json
+// @Param id path string true "Review ID"
+// @Param review body dto.UpdateReviewRequest true "Update review"
+// @Success 200 {object} dto.ReviewResponse
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/reviews/{id} [put]
 func UpdateReview(c *gin.Context) {
 	reviewID := c.Param("id")
 
@@ -96,6 +130,17 @@ func UpdateReview(c *gin.Context) {
 	})
 }
 
+// DeleteReview godoc
+// @Summary Delete a review
+// @Description Delete a review by its ID
+// @Tags reviews
+// @Accept json
+// @Produce json
+// @Param id path string true "Review ID"
+// @Success 200 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/reviews/{id} [delete]
 func DeleteReview(c *gin.Context) {
 	reviewID := c.Param("id")
 
@@ -110,5 +155,5 @@ func DeleteReview(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Freedom of speech purged successfuly"})
+	c.JSON(http.StatusOK, gin.H{"message": "Freedom of speech purged successfully"})
 }

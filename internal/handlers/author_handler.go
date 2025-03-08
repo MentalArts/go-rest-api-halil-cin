@@ -79,12 +79,14 @@ func GetAuthors(c *gin.Context) {
 // GetAuthor godoc
 // @Summary Get specific author info
 // @Description Get an author by given id
-// @Tags author
+// @Tags authors
 // @Accept json
 // @Produce json
-// @Success 200 {array} dto.AuthorResponse
+// @Param id path string true "Author ID"
+// @Success 200 {object} dto.AuthorResponse
+// @Failure 404 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /api/v1/author/:id [get]
+// @Router /api/v1/authors/{id} [get]
 func GetAuthor(c *gin.Context) {
 	id := c.Param("id")
 
@@ -102,6 +104,19 @@ func GetAuthor(c *gin.Context) {
 	})
 }
 
+// UpdateAuthor godoc
+// @Summary Update an author
+// @Description Update an author with the input payload
+// @Tags authors
+// @Accept json
+// @Produce json
+// @Param id path string true "Author ID"
+// @Param author body dto.UpdateAuthorRequest true "Update author"
+// @Success 200 {object} dto.AuthorResponse
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/authors/{id} [put]
 func UpdateAuthor(c *gin.Context) {
 	id := c.Param("id")
 
@@ -140,6 +155,17 @@ func UpdateAuthor(c *gin.Context) {
 	})
 }
 
+// DeleteAuthor godoc
+// @Summary Delete an author
+// @Description Delete an author by given id
+// @Tags authors
+// @Accept json
+// @Produce json
+// @Param id path string true "Author ID"
+// @Success 200 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/authors/{id} [delete]
 func DeleteAuthor(c *gin.Context) {
 	id := c.Param("id")
 

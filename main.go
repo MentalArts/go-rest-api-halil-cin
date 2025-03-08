@@ -19,8 +19,25 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
+	_ "go-rest-api-halil-cin/docs" // Import Swagger docs
 )
 
+// @title           BookClub
+// @version         1.0
+// @description     Database manipulation with go.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   Halil Cin
+// @contact.email  halilcin.pl@gmail.com
+
+// @license.name  MIT
+// @license.url   https://opensource.org/licenses/MIT
+
+// @host      localhost:8080
+// @BasePath  /
 func main() {
 
 	log := logrus.New()
@@ -34,7 +51,7 @@ func main() {
 
 	cfg := config.LoadConfig()
 
-	// Initialize WHY NOT INITIALISE???
+	// Initialize Redis
 	cache.InitializeRedis("redis:6379", "", 0)
 	log.Info("Redis initialized")
 
@@ -56,6 +73,11 @@ func main() {
 	// Set up Gin router
 	router := gin.Default()
 	router.Use(middleware.RateLimiter()) // Apply rate limiting
+
+	// Add Swagger route
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// Set up API routes
 	routes.SetupRoutes(router)
 
 	// Start server with graceful shutdown

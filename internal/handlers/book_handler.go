@@ -11,6 +11,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// CreateBook godoc
+// @Summary Create a new book
+// @Description Create a new book with the input payload
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param book body dto.CreateBookRequest true "Create book"
+// @Success 201 {object} dto.BookResponse
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/books [post]
 func CreateBook(c *gin.Context) {
 	var req dto.CreateBookRequest
 
@@ -42,6 +53,16 @@ func CreateBook(c *gin.Context) {
 	})
 }
 
+// GetBooks godoc
+// @Summary Get all books
+// @Description Get a list of all books in the system
+// @Tags books
+// @Accept json
+// @Produce json
+// @Success 200 {array} dto.BookResponse
+// @Success 200 {object} map[string]string "There are no books in the system"
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/books [get]
 func GetBooks(c *gin.Context) {
 	var books []models.Book
 
@@ -70,6 +91,17 @@ func GetBooks(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// GetBook godoc
+// @Summary Get a specific book
+// @Description Get a book by its ID
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param id path string true "Book ID"
+// @Success 200 {object} dto.BookResponse
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/books/{id} [get]
 func GetBook(c *gin.Context) {
 	id := c.Param("id")
 
@@ -108,6 +140,19 @@ func GetBook(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// UpdateBook godoc
+// @Summary Update a book
+// @Description Update a book with the input payload
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param id path string true "Book ID"
+// @Param book body dto.UpdateBookRequest true "Update book"
+// @Success 200 {object} dto.BookResponse
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/books/{id} [put]
 func UpdateBook(c *gin.Context) {
 	id := c.Param("id")
 
@@ -154,6 +199,17 @@ func UpdateBook(c *gin.Context) {
 	})
 }
 
+// DeleteBook godoc
+// @Summary Delete a book
+// @Description Delete a book by its ID
+// @Tags books
+// @Accept json
+// @Produce json
+// @Param id path string true "Book ID"
+// @Success 200 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/books/{id} [delete]
 func DeleteBook(c *gin.Context) {
 	id := c.Param("id")
 
