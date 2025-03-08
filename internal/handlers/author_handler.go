@@ -84,8 +84,8 @@ func GetAuthors(c *gin.Context) {
 // @Produce json
 // @Param id path string true "Author ID"
 // @Success 200 {object} dto.AuthorResponse
-// @Failure 404 {object} map[string]string{"error": "There is no Author with such credentials"}
-// @Failure 500 {object} map[string]string{"error": "Internal server error"}
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
 // @Router /api/v1/authors/{id} [get]
 func GetAuthor(c *gin.Context) {
 	id := c.Param("id")
@@ -113,9 +113,9 @@ func GetAuthor(c *gin.Context) {
 // @Param id path string true "Author ID"
 // @Param author body dto.UpdateAuthorRequest true "Update author"
 // @Success 200 {object} dto.AuthorResponse
-// @Failure 400 {object} map[string]string{"error": "Invalid Request"}
-// @Failure 404 {object} map[string]string{"error": "There is no Author with such credentials"}
-// @Failure 500 {object} map[string]string{"error": "Internal server error"}
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
 // @Router /api/v1/authors/{id} [put]
 func UpdateAuthor(c *gin.Context) {
 	id := c.Param("id")
@@ -162,9 +162,9 @@ func UpdateAuthor(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Author ID"
-// @Success 200 {object} map[string]string{"message": "Author deleted, Long live oppresive press"}
-// @Failure 404 {object} map[string]string{"error": "There is no Author with such credentals"}
-// @Failure 500 {object} map[string]string{"error": "Failed to delete Author"}
+// @Success 200 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
 // @Router /api/v1/authors/{id} [delete]
 func DeleteAuthor(c *gin.Context) {
 	id := c.Param("id")

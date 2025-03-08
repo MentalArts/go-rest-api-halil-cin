@@ -145,9 +145,9 @@ func UpdateReview(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Review ID"
-// @Success 200 {object} map[string]string{"message": "Freedom of speech purged successfully"}
-// @Failure 404 {object} map[string]string{"error": "Review could not be found"}
-// @Failure 500 {object} map[string]string{"error": "Server got smacked"}
+// @Success 200 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
 // @Router /api/v1/reviews/{id} [delete]
 func DeleteReview(c *gin.Context) {
 	reviewID := c.Param("id")

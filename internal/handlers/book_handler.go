@@ -241,7 +241,7 @@ func UpdateBook(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Book ID"
-// @Success 200 {object} map[string]string{"message": "Ignorance is BLISS"}
+// @Success 200 {object} map[string]string "Ignorance is BLISS"
 // @Failure 404 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /api/v1/books/{id} [delete]
