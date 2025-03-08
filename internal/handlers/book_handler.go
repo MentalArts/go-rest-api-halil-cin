@@ -11,6 +11,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type ErrorResponse struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Details string `json:"details,omitempty"`
+}
+
 // CreateBook godoc
 // @Summary Create a new book
 // @Description Create a new book with the input payload
@@ -22,11 +28,16 @@ import (
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /api/v1/books [post]
+
 func CreateBook(c *gin.Context) {
 	var req dto.CreateBookRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: "Invalid input data",
+			Details: err.Error(),
+		})
 		return
 	}
 
@@ -39,7 +50,11 @@ func CreateBook(c *gin.Context) {
 	}
 
 	if err := db.Create(&book).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, ErrorResponse{
+			Code:    http.StatusInternalServerError,
+			Message: "Internal server error",
+			Details: err.Error(),
+		})
 		return
 	}
 
@@ -67,7 +82,11 @@ func GetBooks(c *gin.Context) {
 	var books []models.Book
 
 	if err := db.Find(&books).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, ErrorResponse{
+			Code:    http.StatusInternalServerError,
+			Message: "Failed to retrieve books",
+			Details: err.Error(),
+		})
 		return
 	}
 
@@ -118,7 +137,11 @@ func GetBook(c *gin.Context) {
 	// Fetch the book from the database
 	var book models.Book
 	if err := db.Preload("Author").Preload("Reviews").First(&book, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "book not found"})
+		c.JSON(http.StatusNotFound, ErrorResponse{
+			Code:    http.StatusNotFound,
+			Message: "Book not found",
+			Details: "The book with the given ID does not exist",
+		})
 		return
 	}
 
@@ -158,13 +181,21 @@ func UpdateBook(c *gin.Context) {
 
 	var req dto.UpdateBookRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, ErrorResponse{
+			Code:    http.StatusBadRequest,
+			Message: "Invalid input data",
+			Details: err.Error(),
+		})
 		return
 	}
 
 	var book models.Book
 	if err := db.First(&book, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "book not found"})
+		c.JSON(http.StatusNotFound, ErrorResponse{
+			Code:    http.StatusNotFound,
+			Message: "Book not found",
+			Details: "The book with the given ID does not exist",
+		})
 		return
 	}
 
@@ -185,7 +216,11 @@ func UpdateBook(c *gin.Context) {
 	}
 
 	if err := db.Save(&book).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+		c.JSON(http.StatusInternalServerError, ErrorResponse{
+			Code:    http.StatusInternalServerError,
+			Message: "Failed to update book",
+			Details: err.Error(),
+		})
 		return
 	}
 
@@ -206,7 +241,7 @@ func UpdateBook(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Book ID"
-// @Success 200 {object} map[string]string
+// @Success 200 {object} map[string]string{"message": "Ignorance is BLISS"}
 // @Failure 404 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /api/v1/books/{id} [delete]
@@ -215,14 +250,22 @@ func DeleteBook(c *gin.Context) {
 
 	var book models.Book
 	if err := db.First(&book, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "book not found"})
+		c.JSON(http.StatusNotFound, ErrorResponse{
+			Code:    http.StatusNotFound,
+			Message: "Book not found",
+			Details: "The book with the given ID does not exist",
+		})
 		return
 	}
 
 	if err := db.Delete(&book).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, ErrorResponse{
+			Code:    http.StatusInternalServerError,
+			Message: "Failed to delete book",
+			Details: err.Error(),
+		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "book deleted"})
+	c.JSON(http.StatusOK, gin.H{"message": "Ignorance is bliss"})
 }

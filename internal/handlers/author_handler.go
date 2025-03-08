@@ -23,7 +23,7 @@ func CreateAuthor(c *gin.Context) {
 	var req dto.CreateAuthorRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body", "Use proper input and try again": err.Error()})
 		return
 	}
 
@@ -34,7 +34,7 @@ func CreateAuthor(c *gin.Context) {
 	}
 
 	if err := db.Create(&author).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create author", "Check if its already exist": err.Error()})
 		return
 	}
 
@@ -59,7 +59,7 @@ func GetAuthors(c *gin.Context) {
 	var authors []models.Author
 
 	if err := db.Find(&authors).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch authors", "Check if they exist": err.Error()})
 		return
 	}
 
@@ -84,15 +84,15 @@ func GetAuthors(c *gin.Context) {
 // @Produce json
 // @Param id path string true "Author ID"
 // @Success 200 {object} dto.AuthorResponse
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 404 {object} map[string]string{"error": "There is no Author with such credentials"}
+// @Failure 500 {object} map[string]string{"error": "Internal server error"}
 // @Router /api/v1/authors/{id} [get]
 func GetAuthor(c *gin.Context) {
 	id := c.Param("id")
 
 	var author models.Author
 	if err := db.First(&author, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "author not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "There is no Author with such credentials"})
 		return
 	}
 
@@ -113,22 +113,22 @@ func GetAuthor(c *gin.Context) {
 // @Param id path string true "Author ID"
 // @Param author body dto.UpdateAuthorRequest true "Update author"
 // @Success 200 {object} dto.AuthorResponse
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} map[string]string{"error": "Invalid Request"}
+// @Failure 404 {object} map[string]string{"error": "There is no Author with such credentials"}
+// @Failure 500 {object} map[string]string{"error": "Internal server error"}
 // @Router /api/v1/authors/{id} [put]
 func UpdateAuthor(c *gin.Context) {
 	id := c.Param("id")
 
 	var req dto.UpdateAuthorRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body", "Try it with proper input": err.Error()})
 		return
 	}
 
 	var author models.Author
 	if err := db.First(&author, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "author not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "There is no Author with such credentials"})
 		return
 	}
 
@@ -143,7 +143,7 @@ func UpdateAuthor(c *gin.Context) {
 	}
 
 	if err := db.Save(&author).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update author", "": err.Error()})
 		return
 	}
 
@@ -162,23 +162,23 @@ func UpdateAuthor(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "Author ID"
-// @Success 200 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Success 200 {object} map[string]string{"message": "Author deleted, Long live oppresive press"}
+// @Failure 404 {object} map[string]string{"error": "There is no Author with such credentals"}
+// @Failure 500 {object} map[string]string{"error": "Failed to delete Author"}
 // @Router /api/v1/authors/{id} [delete]
 func DeleteAuthor(c *gin.Context) {
 	id := c.Param("id")
 
 	var author models.Author
 	if err := db.First(&author, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "author not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "There is no author with such credentials"})
 		return
 	}
 
 	if err := db.Delete(&author).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete author", "": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "author deleted"})
+	c.JSON(http.StatusOK, gin.H{"message": "Author deleted, Long live oppresive press"})
 }

@@ -10,6 +10,17 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// Register godoc
+// @Summary Register a new user
+// @Description Register a new user with a username and password
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param registerRequest body dto.RegisterRequest true "Register user"
+// @Success 201 {object} gin.H{"message": "User registered successfully"}
+// @Failure 400 {object} gin.H{"error": "Invalid input"}
+// @Failure 500 {object} gin.H{"error": "Failed to create user"}
+// @Router /api/v1/auth/register [post]
 func Register(c *gin.Context) {
 	var req dto.RegisterRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -37,6 +48,18 @@ func Register(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
 }
+
+// Login godoc
+// @Summary Login a user
+// @Description Login a user and receive an access token and refresh token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param loginRequest body dto.LoginRequest true "Login user"
+// @Success 200 {object} dto.AuthResponse
+// @Failure 400 {object} gin.H{"error": "Invalid input"}
+// @Failure 401 {object} gin.H{"error": "Invalid username or password"}
+// @Router /api/v1/auth/login [post]
 
 func Login(c *gin.Context) {
 	var req dto.LoginRequest
@@ -70,6 +93,18 @@ func Login(c *gin.Context) {
 		RefreshToken: refreshToken,
 	})
 }
+
+// RefreshToken godoc
+// @Summary Refresh an access token
+// @Description Refresh an access token using a refresh token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param refreshTokenRequest body dto.RefreshTokenRequest true "Refresh token"
+// @Success 200 {object} dto.AuthResponse
+// @Failure 400 {object} gin.H{"error": "Invalid input"}
+// @Failure 401 {object} gin.H{"error": "Invalid refresh token"}
+// @Router /api/v1/auth/refresh-token [post]
 
 func RefreshToken(c *gin.Context) {
 	var req dto.RefreshTokenRequest
