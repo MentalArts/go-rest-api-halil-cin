@@ -15,6 +15,16 @@ to be able to run this API smoothly.
 
 ## Installation
  After cloning this repo to your local machine you should navigate to the directory.
+ Create an .env file, credentials used in this app listed below
+```
+PG_HOST=db
+PG_PORT=5432
+PG_USER=postgres
+PG_NAME=bookclub
+PG_PASSWORD=sifre
+
+```
+
 ```
 docker compose up 
 ```
