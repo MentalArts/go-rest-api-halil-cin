@@ -50,6 +50,11 @@ func GetBooks(c *gin.Context) {
 		return
 	}
 
+	if len(books) == 0 {
+		c.JSON(http.StatusOK, gin.H{"message": "There are no books in the system"})
+		return
+	}
+
 	var response []dto.BookResponse
 	for _, book := range books {
 		response = append(response, dto.BookResponse{
@@ -102,6 +107,7 @@ func GetBook(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
 func UpdateBook(c *gin.Context) {
 	id := c.Param("id")
 
